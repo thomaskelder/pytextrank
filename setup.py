@@ -1,11 +1,14 @@
 from setuptools import setup
 
+with open('requirements.txt') as fp:
+    install_requires = fp.read()
+
 def readme():
     with open('README.md') as f:
         return f.read()
 
 setup(name='pytextrank',
-      version='1.0.0',
+      version='1.0.1',
       description='Python implimentation of TextRank for text document NLP parsing and summarization',
       long_description=readme(),
       classifiers=[
@@ -30,11 +33,5 @@ setup(name='pytextrank',
       author_email='ceteri@gmail.com',
       license='Apache License 2.0',
       packages=['pytextrank'],
-      install_requires=[
-          'datasketch',
-          'graphviz',
-          'networkx',
-          'spacy',
-          'statistics',
-      ],
+      install_requires=install_requires,
       zip_safe=False)

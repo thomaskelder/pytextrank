@@ -229,7 +229,7 @@ def parse_graf (doc_id, graf_text, base_idx, spacy_nlp=None):
                 pos_family = '.'
                 word = word._replace(pos=pos_family)
             else:
-                pos_family = tok_tag.lower()[0]
+                pos_family = tok_tag.lower()[0] if len(tok_tag) > 0 else tok_tag
 
             if pos_family in POS_LEMMA:
                 # can lemmatize this word?
@@ -320,9 +320,9 @@ def build_graph (json_iter):
                 if not graph.has_node(word_id):
                     graph.add_node(word_id)
 
-            try:
+            if "edge" in dir(graph):
                 graph.edges[pair[0],pair[1]]["weight"] += 1.0
-            except KeyError:
+            else:
                 graph.add_edge(pair[0], pair[1], weight=1.0)
 
     return graph
@@ -656,17 +656,19 @@ def normalize_key_phrases (json_iter, ranks, stopwords=None, spacy_nlp=None, ski
 ######################################################################
 ## sentence significance
 
+mhash = MinHash(512)
+
+
 def mh_digest (data):
     """
     create a MinHash digest
     """
-    num_perm = 512
-    m = MinHash(num_perm)
+    mhash.clear()
 
     for d in data:
-        m.update(d.encode('utf8'))
+        mhash.update(d.encode('utf8'))
 
-    return m
+    return mhash
 
 
 def rank_kernel (json_iter):

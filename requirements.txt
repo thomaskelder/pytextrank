@@ -1,6 +1,6 @@
-spacy==1.8.2
+spacy==2.0.16
 
-networkx==1.11
+networkx==2.2
 
 datasketch==1.2.1
 
